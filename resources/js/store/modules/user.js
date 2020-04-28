@@ -1,7 +1,7 @@
 export default {
     state: {
         user: {   
-            uid: null,
+            id: null,
             name: null,
             email: null,
             is_authenticated: false
@@ -9,16 +9,18 @@ export default {
     },
     mutations: {
         set_user(state, payload) {
-            state.user.uid = payload.user.id;
-            state.user.name = payload.user.name;
-            state.user.email = payload.user.email;
+            state.user.id = payload.id;
+            state.user.name = payload.name;
+            state.user.email = payload.email;
             state.user.is_authenticated = true;
         },
         un_set_user(state) {
-            state.user.uid = null;
-            state.user.name = null;
-            state.user.email = null;
-            state.user.is_authenticated = false;
+            state.user = {
+                id: null,
+                name: null,
+                email: null,
+                is_authenticated: false
+            }
           },
     },
     actions: {
@@ -31,7 +33,7 @@ export default {
             .then(responce => {
                 commit("clear_error");
                 commit("set_processing", false);
-                commit("set_user", responce.data);
+                commit("set_user", responce.data.user);
                 if (responce.data.access_token){
                     localStorage.setItem('token', responce.data.access_token);
                     //localStorage.setItem('user', JSON.stringify(responce.data.user));
@@ -40,7 +42,7 @@ export default {
             })
             .catch(error => {
                 commit("set_processing", false);
-                commit("set_error", error);
+                commit("set_error", error.message);
             })
         },
         logout_user ({ commit }){
@@ -48,9 +50,15 @@ export default {
             commit("un_set_user");
 
         },
-        state_change({ commit, state }) {
-            if (localStorage.hasOwnProperty('user')) {
-                commit("set_user", state.user)
+        state_change({ commit }) {
+            if (localStorage.hasOwnProperty('token')) {
+                axios.get('/api/user/getuser')
+                .then(responce => {
+                    commit("set_user", responce.data);
+                })
+                .catch(error => {
+                    commit("set_error", error.message);
+                })
             } 
             else {
                 commit("un_set_user");

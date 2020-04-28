@@ -1951,9 +1951,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {};
+  },
+  computed: {
+    user_info: function user_info() {
+      return this.$store.getters.user_info;
+    }
   }
 });
 
@@ -2179,7 +2185,7 @@ __webpack_require__.r(__webpack_exports__);
     logout: function logout() {
       this.$store.dispatch('logout_user');
       this.$router.push({
-        path: "/"
+        path: "/login"
       });
     }
   },
@@ -40269,7 +40275,9 @@ var render = function() {
     { attrs: { align: "center", justify: "center" } },
     [
       _c("v-col", { staticClass: "text-center" }, [
-        _c("h1", [_vm._v("ADMIN PAGE")])
+        _c("h1", [_vm._v("ADMIN PAGE")]),
+        _vm._v(" "),
+        _c("p", [_vm._v(_vm._s(_vm.user_info))])
       ])
     ],
     1
@@ -98338,7 +98346,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   state: {
     user: {
-      uid: null,
+      id: null,
       name: null,
       email: null,
       is_authenticated: false
@@ -98346,16 +98354,18 @@ __webpack_require__.r(__webpack_exports__);
   },
   mutations: {
     set_user: function set_user(state, payload) {
-      state.user.uid = payload.user.id;
-      state.user.name = payload.user.name;
-      state.user.email = payload.user.email;
+      state.user.id = payload.id;
+      state.user.name = payload.name;
+      state.user.email = payload.email;
       state.user.is_authenticated = true;
     },
     un_set_user: function un_set_user(state) {
-      state.user.uid = null;
-      state.user.name = null;
-      state.user.email = null;
-      state.user.is_authenticated = false;
+      state.user = {
+        id: null,
+        name: null,
+        email: null,
+        is_authenticated: false
+      };
     }
   },
   actions: {
@@ -98368,14 +98378,14 @@ __webpack_require__.r(__webpack_exports__);
       }).then(function (responce) {
         commit("clear_error");
         commit("set_processing", false);
-        commit("set_user", responce.data);
+        commit("set_user", responce.data.user);
 
         if (responce.data.access_token) {
           localStorage.setItem('token', responce.data.access_token); //localStorage.setItem('user', JSON.stringify(responce.data.user));
         }
       })["catch"](function (error) {
         commit("set_processing", false);
-        commit("set_error", error);
+        commit("set_error", error.message);
       });
     },
     logout_user: function logout_user(_ref2) {
@@ -98384,11 +98394,14 @@ __webpack_require__.r(__webpack_exports__);
       commit("un_set_user");
     },
     state_change: function state_change(_ref3) {
-      var commit = _ref3.commit,
-          state = _ref3.state;
+      var commit = _ref3.commit;
 
-      if (localStorage.hasOwnProperty('user')) {
-        commit("set_user", state.user);
+      if (localStorage.hasOwnProperty('token')) {
+        axios.get('/api/user/getuser').then(function (responce) {
+          commit("set_user", responce.data);
+        })["catch"](function (error) {
+          commit("set_error", error.message);
+        });
       } else {
         commit("un_set_user");
       }
@@ -98444,8 +98457,8 @@ var opts = {};
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! g:\OSPanel\domains\localhost\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! g:\OSPanel\domains\localhost\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! G:\OSPanel\domains\localhost\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! G:\OSPanel\domains\localhost\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

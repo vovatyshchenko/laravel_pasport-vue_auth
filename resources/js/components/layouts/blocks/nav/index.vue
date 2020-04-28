@@ -77,7 +77,7 @@
     methods: {
       logout() {
         this.$store.dispatch('logout_user');
-        this.$router.push({ path: "/" });
+        this.$router.push({ path: "/login" });
       }
     },
     computed: {

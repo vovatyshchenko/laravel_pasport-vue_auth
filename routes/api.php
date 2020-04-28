@@ -20,5 +20,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('user')->group(function () {
     Route::post('/login', 'api\v1\auth\LoginController@login');
-    //Route::middleware('auth:api')->post('/logout', 'api\v1\LoginController@logout');
+    Route::middleware('auth:api')->get('/getuser', 'api\v1\user\UserInfoController@getUser');
 });
