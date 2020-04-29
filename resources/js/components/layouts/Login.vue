@@ -1,5 +1,5 @@
 <template>
-  <v-row align="center" justify="center">
+  <v-row align="center" justify="center" @keypress.enter.prevent="login">
     <v-col cols="12" sm="8" md="6">
       <v-card class="elevation-12 mt-5">
         <v-toolbar color="primary" dark flat>
@@ -10,8 +10,25 @@
         <v-card-text>
           <v-alert :value="error" type="warning">{{ error }}</v-alert>
           <v-form v-model="valid">
-            <v-text-field v-model="user.email" label="E-Mail" name="login" prepend-icon="person" type="text" required :rules="erules"/>
-            <v-text-field v-model="user.password" id="password" label="Пароль" name="password" prepend-icon="lock" type="password" required :rules="prules"/>
+            <v-text-field v-model="user.email" 
+              label="E-Mail" 
+              name="login" 
+              prepend-icon="person" 
+              type="text" 
+              required 
+              :rules="erules"
+            />
+            <v-text-field v-model="user.password" 
+              id="password" 
+              label="Пароль" 
+              name="password" 
+              prepend-icon="lock"
+              :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+              :type="show ? 'text' : 'password'" 
+              required 
+              :rules="prules"
+              @click:append="show = !show"
+            />
           </v-form>
         </v-card-text>
         <v-card-actions>
@@ -20,7 +37,7 @@
         </v-card-actions>
       </v-card>
     </v-col>
-  </v-row> 
+  </v-row>
 </template>
 
 <script>
@@ -31,6 +48,7 @@ export default {
         password: null
       },
       valid: false,
+      show: false,
       erules: [
         (v) => !!v || "Пожалуйста, введите email",
         (v) =>/^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/.test(v) || "Неверный email"
