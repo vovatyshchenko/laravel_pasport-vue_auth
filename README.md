@@ -2,6 +2,7 @@
 <p>composer install</p>
 <p>php artisan migrate</p>
 <p>php artisan passport:keys</p>
+<p>php artisan passport:client --personal</p>
 <p>npm install</p>
 <p>npm run dev</p>
 <p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>

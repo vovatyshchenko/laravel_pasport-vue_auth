@@ -16,8 +16,8 @@ class LoginController extends Controller
         ]);
 
         if (!Auth::attempt($login)){
-            return response(['message' => 'Неверные логин или пароль'], 401);
-            //return abort(401, 'Неверные логин или пароль');
+            //return response(['message' => 'Неверные логин или пароль'], 401);
+            return response(['code' => 400, 'messgae' => 'Неверные логин или пароль'], 400);
         }
 
         $accessToken = Auth::user()->createToken('authToken')->accessToken;

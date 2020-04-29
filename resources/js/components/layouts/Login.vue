@@ -6,6 +6,7 @@
           <v-toolbar-title>Вход</v-toolbar-title>
           <v-spacer />
         </v-toolbar>
+        <v-progress-linear :active="processing" indeterminate height='5' color="red darken-1"></v-progress-linear>
         <v-card-text>
           <v-alert :value="error" type="warning">{{ error }}</v-alert>
           <v-form v-model="valid">
